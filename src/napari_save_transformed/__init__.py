@@ -43,7 +43,11 @@ def transform_arrays(arrays, affines):
     translation = Affine(translate=-min_corner)
     for arr, aff in zip(arrays, affines):
         # Apply the transformation
-        output = affine_transform(arr, translation.compose(aff).inverse, output_shape=output_shape)
+        output = affine_transform(
+            input=arr,
+            matrix=translation.compose(aff).inverse,
+            output_shape=output_shape,
+        )
         outputs.append(output)
 
     return outputs, output_shape
