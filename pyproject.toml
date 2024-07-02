@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "napari-save-transformed"
+dynamic = ["version"]
+description = 'Napari plugin to save layers with their transforms applied.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "BSD-3-Clause"
+keywords = []
+authors = [
+  { name = "Jan Eglinger", email = "jan.eglinger@fmi.ch" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Framework :: napari",
+]
+dependencies = [
+  "napari",
+]
+
+[project.urls]
+Documentation = "https://github.com/fmi-faim/napari-save-transformed#readme"
+Issues = "https://github.com/fmi-faim/napari-save-transformed/issues"
+Source = "https://github.com/fmi-faim/napari-save-transformed"
+
+[project.entry-points."napari.manifest"]
+napari-save-transformed = "napari_save_transformed:napari.yaml"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/napari_save_transformed tests}"
+
+[tool.coverage.run]
+source_pkgs = ["napari_save_transformed", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/napari_save_transformed/__about__.py",
+]
+
+[tool.coverage.paths]
+napari_save_transformed = ["src/napari_save_transformed", "*/napari-save-transformed/src/napari_save_transformed"]
+tests = ["tests", "*/napari-save-transformed/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["win-64"]
+
+[tool.pixi.pypi-dependencies]
+napari-save-transformed = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+napari = ">=0.4.19.post1,<0.4.20"
+pyqt = ">=5.15.9,<5.16"
+
+[tool.pixi.feature.napari.dependencies]
+napari = ">=0.4.19.post1,<0.4.20"
+pyqt = ">=5.15.9,<5.16"
+
+[tool.pixi.environments]
+napari = { features = ["napari"], no-default-feature = true }

@@ -1,0 +1,13 @@
+name: napari-save-transformed
+contributions:
+  commands:
+  - id: napari-save-transformed.write_transformed_layers
+    title: Save transformed layers as tiff
+    python_name: napari_save_transformed:write_transformed_layers
+  writers:
+  - command: napari-save-transformed.write_transformed_layers
+    layer_types:
+    - image+
+    filename_extensions:
+    - .tif
+    display_name: Images with transformation (padded)
