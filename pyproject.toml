@@ -40,6 +40,12 @@ napari-save-transformed = "napari_save_transformed:napari.yaml"
 [tool.hatch.version]
 source = "vcs"
 
+[tool.hatch.envs.hatch-test]
+extra-dependencies = [
+  "pytest-qt",
+  "pyqt5",
+]
+
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
@@ -51,9 +57,7 @@ check = "mypy --install-types --non-interactive {args:src/napari_save_transforme
 source_pkgs = ["napari_save_transformed", "tests"]
 branch = true
 parallel = true
-omit = [
-  "src/napari_save_transformed/__about__.py",
-]
+omit = []
 
 [tool.coverage.paths]
 napari_save_transformed = ["src/napari_save_transformed", "*/napari-save-transformed/src/napari_save_transformed"]
