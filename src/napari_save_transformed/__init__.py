@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
+import yaml
 from napari.utils.transforms import Affine
+from pydantic import Field, RootModel
 from scipy.ndimage import affine_transform
 from skimage.transform import matrix_transform
 from tifffile.tifffile import imwrite
@@ -12,14 +15,48 @@ if TYPE_CHECKING:
     from napari.types import FullLayerData
 
 
+class TransformDict(RootModel):
+    root: dict[str, np.ndarray] = Field(default_factory=dict)
+
+    model_config = {"arbitrary_types_allowed": True}  # noqa: RUF012
+
+    def __getitem__(self, key):
+        return self.root[key]
+
+    def __setitem__(self, key, value):
+        self.root[key] = value
+
+    @classmethod
+    def from_yaml(cls, yaml_str: str) -> TransformDict:
+        loaded_data = yaml.safe_load(yaml_str)
+        return cls({k: np.array(v).reshape(3, 3) for k, v in loaded_data.items()})
+
+    def to_yaml(self) -> str:
+        return yaml.safe_dump(self.model_dump(), default_flow_style=None)
+
+    @classmethod
+    def from_file(cls, file_path: str) -> TransformDict:
+        with open(file_path) as file:
+            return cls.from_yaml(file.read())
+
+    def to_file(self, file_path: str) -> None:
+        with open(file_path, "w") as file:
+            file.write(self.to_yaml())
+
+
 def write_transformed_layers(path: str, layer_data: list[FullLayerData]) -> list[str]:
     images = []
     transforms = []
+    mapping = TransformDict()
     for data, attrs, _ in layer_data:
         images.append(data)
+        mapping[attrs["name"]] = attrs["affine"].tolist()
         transforms.append(Affine(affine_matrix=attrs["affine"]))
     results, out_shape = transform_arrays(images, transforms)
-    imwrite(path, np.stack(results).astype(np.float32), imagej=True)
+    imwrite(path, np.stack(results), imagej=True)
+    out_path = Path(path)
+    mapping_file = out_path.parent / f"{out_path.stem}_transforms.yml"
+    mapping.to_file(mapping_file)
     return path
 
 

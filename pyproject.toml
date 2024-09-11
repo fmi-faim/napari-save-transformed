@@ -7,7 +7,7 @@ name = "napari-save-transformed"
 dynamic = ["version"]
 description = 'Napari plugin to save layers with their transforms applied.'
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "BSD-3-Clause"
 keywords = []
 authors = [
@@ -16,7 +16,6 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -58,6 +57,7 @@ napari_save_transformed = ["src/napari_save_transformed", "*/napari-save-transfo
 tests = ["tests", "*/napari-save-transformed/tests"]
 
 [tool.coverage.report]
+show_missing = true
 exclude_lines = [
   "no cov",
   "if __name__ == .__main__.:",
@@ -80,6 +80,15 @@ pyqt = ">=5.15.9,<5.16"
 [tool.pixi.feature.napari.dependencies]
 napari = ">=0.4.19.post1,<0.4.20"
 pyqt = ">=5.15.9,<5.16"
+pip = ">=24.0,<25"
 
 [tool.pixi.environments]
 napari = { features = ["napari"], no-default-feature = true }
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"**/tests/*" = ["INP001"]
