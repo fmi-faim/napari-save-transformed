@@ -20,6 +20,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Framework :: napari",
@@ -74,16 +75,20 @@ napari-save-transformed = { path = ".", editable = true }
 [tool.pixi.tasks]
 
 [tool.pixi.dependencies]
-napari = ">=0.4.19.post1,<0.4.20"
-pyqt = ">=5.15.9,<5.16"
+napari = ">=0.5.6,<0.6"
+pyqt = ">=5.15.9,<6"
 
 [tool.pixi.feature.napari.dependencies]
-napari = ">=0.4.19.post1,<0.4.20"
-pyqt = ">=5.15.9,<5.16"
+napari = ">=0.5.6,<0.6"
+pyqt = ">=5.15.9,<6"
 pip = ">=24.0,<25"
+
+[tool.pixi.feature.jupyter.dependencies]
+jupyter = ">=1.1.1,<2"
 
 [tool.pixi.environments]
 napari = { features = ["napari"], no-default-feature = true }
+jupyter = ["jupyter"]
 
 [tool.pytest.ini_options]
 addopts = [
