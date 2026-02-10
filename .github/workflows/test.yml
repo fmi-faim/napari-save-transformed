@@ -2,9 +2,9 @@ name: test
 
 on:
   push:
-    branches: main
+    branches: [main]
   pull_request:
-    branches: main
+    branches: [main]
 
 concurrency:
   group: test-${{ github.head_ref }}
@@ -16,32 +16,33 @@ env:
 
 jobs:
   run:
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+    name: ${{ matrix.pixi-environment }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
-
-    env:
-      DISPLAY: ':99.0'
-
+        pixi-environment:
+          - py310
+          - py311
+          - py312
+          - py313
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.9.3
+        with:
+          cache: true
+          environments: ${{ matrix.pixi-environment }}
 
-    - uses: tlambert03/setup-qt-libs@v1
+      - name: Run tests
+        run: pixi run --environment ${{ matrix.pixi-environment }} cov-xml
 
-    - name: Install Hatch
-      run: pip install --upgrade hatch
-
-    - name: Run static analysis
-      run: hatch fmt --check
-
-    - name: Run tests
-      run: hatch test --python ${{ matrix.python-version }} --cover --randomize --parallel --retries 2 --retry-delay 1
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: fmi-faim/napari-save-transformed
