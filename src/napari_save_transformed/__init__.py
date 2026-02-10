@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import yaml
-from napari.utils.transforms import Affine
+from napari.utils.transforms import Affine  # type: ignore[import-untyped]
 from pydantic import Field, RootModel
 from scipy.ndimage import affine_transform
 from skimage.transform import matrix_transform
 from tifffile.tifffile import imwrite
 
 if TYPE_CHECKING:
-    from napari.types import FullLayerData
+    from napari.types import FullLayerData  # type: ignore[import-untyped]
 
 
 class TransformDict(RootModel):
@@ -35,11 +35,11 @@ class TransformDict(RootModel):
         return yaml.safe_dump(self.model_dump(), default_flow_style=None)
 
     @classmethod
-    def from_file(cls, file_path: str) -> TransformDict:
+    def from_file(cls, file_path: str | Path) -> TransformDict:
         with open(file_path) as file:
             return cls.from_yaml(file.read())
 
-    def to_file(self, file_path: str) -> None:
+    def to_file(self, file_path: str | Path) -> None:
         with open(file_path, "w") as file:
             file.write(self.to_yaml())
 
@@ -57,7 +57,7 @@ def write_transformed_layers(path: str, layer_data: list[FullLayerData]) -> list
     out_path = Path(path)
     mapping_file = out_path.parent / f"{out_path.stem}_transforms.yml"
     mapping.to_file(mapping_file)
-    return path
+    return [path]
 
 
 def transform_arrays(arrays, affines):
