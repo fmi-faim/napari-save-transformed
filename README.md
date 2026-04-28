@@ -2,6 +2,7 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/napari-save-transformed.svg)](https://pypi.org/project/napari-save-transformed)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/napari-save-transformed.svg)](https://pypi.org/project/napari-save-transformed)
+[![codecov](https://codecov.io/gh/fmi-faim/napari-save-transformed/graph/badge.svg?token=Y2715QGTCC)](https://codecov.io/gh/fmi-faim/napari-save-transformed)
 
 -----
 
