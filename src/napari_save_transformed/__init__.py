@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class TransformDict(RootModel):
     root: dict[str, np.ndarray] = Field(default_factory=dict)
 
-    model_config = {"arbitrary_types_allowed": True}  # noqa: RUF012
+    model_config = {"arbitrary_types_allowed": True}
 
     def __getitem__(self, key):
         return self.root[key]
