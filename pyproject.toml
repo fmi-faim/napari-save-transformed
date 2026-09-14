@@ -7,7 +7,7 @@ name = "napari-save-transformed"
 dynamic = ["version"]
 description = 'Napari plugin to save layers with their transforms applied.'
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "BSD-3-Clause"
 keywords = []
 authors = [
@@ -16,17 +16,17 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Framework :: napari",
 ]
 dependencies = [
-  "napari>=0.6.6,<0.7",
+  "napari >=0.7.1,<0.10",
 ]
 
 [project.urls]
@@ -68,8 +68,8 @@ napari-save-transformed = { path = ".", editable = true }
 [tool.pixi.tasks]
 
 [tool.pixi.dependencies]
-napari = ">=0.6.6,<0.7"
-pyqt = ">=5.15.9,<6"
+napari = ">=0.7.1,<0.10"
+pyqt6 = ">=6.8.1,<7"
 
 [tool.pixi.feature.jupyter.dependencies]
 jupyter = ">=1.1.1,<2"
@@ -91,7 +91,7 @@ py310 = { features = ["py310", "test"], solve-group = "py310" }
 py311 = { features = ["py311", "test"], solve-group = "py311" }
 py312 = { features = ["py312", "test"], solve-group = "py312" }
 py313 = { features = ["py313", "test"], solve-group = "py313" }
-# py314 = { features = ["py314", "test"], solve-group = "py314" }
+py314 = { features = ["py314", "test"], solve-group = "py314" }
 lint = { features = ["lint"], solve-group = "py311" }
 jupyter = { features = ["jupyter"], solve-group = "py313" }
 build = { features = ["build"], no-default-feature = true }
@@ -114,8 +114,8 @@ python = "3.12.*"
 [tool.pixi.feature.py313.dependencies]
 python = "3.13.*"
 
-# [tool.pixi.feature.py314.dependencies]
-# python = "3.14.*"
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
 
 [tool.pytest.ini_options]
 addopts = [
