@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class TransformDict(RootModel):
     root: dict[str, np.ndarray] = Field(default_factory=dict)
 
-    model_config = {"arbitrary_types_allowed": True}  # noqa: RUF012
+    model_config = {"arbitrary_types_allowed": True}
 
     def __getitem__(self, key):
         return self.root[key]
@@ -52,7 +52,7 @@ def write_transformed_layers(path: str, layer_data: list[FullLayerData]) -> list
         images.append(data)
         mapping[attrs["name"]] = attrs["affine"].tolist()
         transforms.append(Affine(affine_matrix=attrs["affine"]))
-    results, out_shape = transform_arrays(images, transforms)
+    results, _out_shape = transform_arrays(images, transforms)
     imwrite(path, np.stack(results), imagej=True)
     out_path = Path(path)
     mapping_file = out_path.parent / f"{out_path.stem}_transforms.yml"
